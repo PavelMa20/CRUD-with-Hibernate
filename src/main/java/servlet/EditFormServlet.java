@@ -1,7 +1,7 @@
 package servlet;
 
+import exception.DBException;
 import model.User;
-import service.UserServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,8 +15,8 @@ public class EditFormServlet extends BaseServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doEX(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, DBException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
         User exUser = userServiceImpl.getUser(id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/userForm.jsp");

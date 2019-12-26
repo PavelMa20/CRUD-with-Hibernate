@@ -1,7 +1,7 @@
 package servlet;
 
+import exception.DBException;
 import model.User;
-
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,8 +14,8 @@ public class UpdateServlet extends BaseServlet {
 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doEX(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, DBException {
         User upUser = new User(Integer.parseInt(request.getParameter("id")),
                 (request.getParameter("name")), request.getParameter("password"),
                 request.getParameter("login"));

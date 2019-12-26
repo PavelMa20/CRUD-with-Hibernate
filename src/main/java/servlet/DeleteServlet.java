@@ -1,9 +1,8 @@
 package servlet;
 
+import exception.DBException;
 import model.User;
-import service.UserServiceImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,8 +13,8 @@ public class DeleteServlet extends BaseServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doEX(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, DBException {
         int id = Integer.parseInt(request.getParameter("id"));
         User dUser = new User(id);
         userServiceImpl.deleteUser(dUser);

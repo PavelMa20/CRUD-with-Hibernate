@@ -1,80 +1,83 @@
 package dao;
 
-import interfaces.UserDao;
+import exception.DBException;
 import model.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
-
+import util.DBHelper;
 
 import java.util.List;
 
 
-public class UserDaoImpl implements AutoCloseable, UserDao {
-    private Session session;
+public class UserDaoImpl implements UserDao {
+    private static SessionFactory sessionFactory = DBHelper.getSessionFactory();
 
-    public UserDaoImpl(Session session) {
-        this.session = session;
+    public UserDaoImpl() {
     }
 
-    private int getUserIdByLogin(String login) {
 
-        List<User> list = session.createCriteria(User.class).add(Restrictions.eq("login", login)).list();
-        if (list.isEmpty()) {
-            return -1;
+    public User getUserById(int id) throws DBException {
+        try (Session session = sessionFactory.openSession()) {
+            Query query = session.createQuery("from User user where user.id =:id");
+            query.setParameter("id", id);
+            List<User> users = query.list();
+            if (users.isEmpty()) {
+                throw new DBException("user is empty");
+            }
+            return users.listIterator().next();
         }
-        return list.listIterator().next().getId();
-    }
-
-    public User getUserById(int id) {
-
-        List<User> list = session.createCriteria(User.class).add(Restrictions.eq("id", id)).list();
-        if (list.isEmpty()) {
-            return null;
-        }
-        return list.listIterator().next();
-
     }
 
     @Override
-    public void addUser(User user) {
-        Transaction transaction = session.beginTransaction();
-        try {
-            if (getUserIdByLogin(user.getLogin()) != -1) {
-                throw new Exception("alredy exist");
-            }
+    public void addUser(User user) throws DBException {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
 
+            Query query = session.createQuery("from User user where user.login =:login");
+            query.setParameter("login", user.getLogin());
+            List<User> users = query.list();
+            if (!users.isEmpty()) {
+                throw new DBException("alredy exist");
+            }
             session.save(user);
             transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     @Override
-    public void updateUser(User user) {
-        Transaction transaction = session.beginTransaction();
-        session.update(user);
-        transaction.commit();
+    public void updateUser(User user) throws DBException {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.update(user);
+            transaction.commit();
+        } catch (Exception e) {
+            throw new DBException(e.getMessage());
+        }
     }
 
     @Override
-    public void deleteUser(User user) {
-        Transaction transaction = session.beginTransaction();
-        session.delete(user);
-        transaction.commit();
+    public void deleteUser(User user) throws DBException {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.delete(user);
+            transaction.commit();
+        } catch (Exception e) {
+            throw new DBException(e.getMessage());
+        }
     }
 
     @Override
-    public List<User> getAllUsers() {
-        Query query = session.createQuery("FROM User");
-        return query.list();
+    public List<User> getAllUsers() throws DBException {
+        try (Session session = sessionFactory.openSession()) {
+
+            Query query = session.createQuery("FROM User");
+            return query.list();
+        } catch (Exception e) {
+            throw new DBException(e.getMessage());
+        }
     }
 
 
-    @Override
-    public void close() throws Exception {
-        session.close();
-    }
 }

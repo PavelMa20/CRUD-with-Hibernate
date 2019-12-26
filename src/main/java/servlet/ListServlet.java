@@ -1,9 +1,8 @@
 package servlet;
 
 
+import exception.DBException;
 import model.User;
-import service.UserServiceImpl;
-
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,11 +17,9 @@ public class ListServlet extends BaseServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doEX(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DBException {
         List<User> listUser;
-
         listUser = userServiceImpl.getAllUsers();
-
         request.setAttribute("listUser", listUser);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/userList.jsp");
         dispatcher.forward(request, response);
