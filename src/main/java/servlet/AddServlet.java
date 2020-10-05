@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/insert"})
-public class AddServlet extends BaseServlet{
+public class AddServlet extends BaseServlet {
 
 
     @Override

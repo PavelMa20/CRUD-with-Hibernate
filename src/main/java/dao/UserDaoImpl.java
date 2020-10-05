@@ -39,6 +39,7 @@ public class UserDaoImpl implements UserDao {
             query.setParameter("login", user.getLogin());
             List<User> users = query.list();
             if (!users.isEmpty()) {
+                transaction.rollback();
                 throw new DBException("alredy exist");
             }
             session.save(user);
@@ -48,22 +49,26 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void updateUser(User user) throws DBException {
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.update(user);
             transaction.commit();
         } catch (Exception e) {
+            transaction.rollback();
             throw new DBException(e.getMessage());
         }
     }
 
     @Override
     public void deleteUser(User user) throws DBException {
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.delete(user);
             transaction.commit();
         } catch (Exception e) {
+            transaction.rollback();
             throw new DBException(e.getMessage());
         }
     }

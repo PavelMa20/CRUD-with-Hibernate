@@ -23,26 +23,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(User user) throws DBException {
-            userDaoImpl.addUser(user);
+        userDaoImpl.addUser(user);
     }
 
     @Override
     public List<User> getAllUsers() throws DBException {
-            return userDaoImpl.getAllUsers();
+        return userDaoImpl.getAllUsers();
     }
 
     @Override
     public void deleteUser(User user) throws DBException {
-            userDaoImpl.deleteUser(user);
+        userDaoImpl.deleteUser(user);
     }
 
     @Override
     public void updateUser(User user) throws DBException {
-            userDaoImpl.updateUser(user);
+        userDaoImpl.updateUser(user);
     }
 
     @Override
     public User getUser(int id) throws DBException {
-            return userDaoImpl.getUserById(id);
+        return userDaoImpl.getUserById(id);
     }
 }

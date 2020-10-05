@@ -24,7 +24,8 @@ public class DBHelper {
 
         configuration.setProperty("hibernate.dialect", PropertyReader.getProperty("hibernate.dialect"));
         configuration.setProperty("hibernate.connection.driver_class", PropertyReader.getProperty("hibernate.connection.driver_class"));
-        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/" + PropertyReader.getProperty("hibernate.connection.url") + "?serverTimezone=UTC");
+        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/" +
+                PropertyReader.getProperty("hibernate.connection.url") + "?serverTimezone=" + PropertyReader.getProperty("hibernate.jdbc.time_zone"));
         configuration.setProperty("hibernate.connection.username", PropertyReader.getProperty("hibernate.connection.username"));
         configuration.setProperty("hibernate.connection.password", PropertyReader.getProperty("hibernate.connection.password"));
         configuration.setProperty("hibernate.show_sql", PropertyReader.getProperty("hibernate.show_sql"));
